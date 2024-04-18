@@ -138,7 +138,7 @@ router.get(
     try {
       // Pagination parameters
       const page = parseInt(req.query.page) || 1;
-      const perPage = parseInt(req.query.perPage) || 30;
+      const perPage = parseInt(req.query.perPage) ||20;
       console.log('Pagination Params:', { page, perPage }); // Log pagination params
 
       // Sorting parameters
