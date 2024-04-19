@@ -23,6 +23,8 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { getAllOrdersOfUser } from "../../redux/actions/order";
+import AllOrdersComponent from '../Shop/AllOrders';
+
 
 const ProfileContent = ({ active }) => {
   const { user, error, successMessage } = useSelector((state) => state.user);
@@ -209,11 +211,31 @@ const AllOrders = () => {
 
   useEffect(() => {
     dispatch(getAllOrdersOfUser(user._id));
-  }, []);
+  }, [dispatch, user._id]);
 
   const columns = [
-    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
-
+    { 
+      field: "image", 
+      headerName: "Product Image", 
+      minWidth: 180, 
+      flex: 0.7,
+      renderCell: (params) => {
+        return (
+          <Link to={`/product/${params.id}`}>
+            <img src={params.value} alt="Product" style={{ width: 50, height: 50 }} />
+          </Link>
+        );
+      }
+    },
+    { field: "name", headerName: "Name", minWidth: 180, flex: 1.4 ,
+    renderCell: (params) => {
+      return (
+        <Link to={`/product/${params.id}`}>
+          {params.value}
+        </Link>
+      );
+    }
+  },
     {
       field: "status",
       headerName: "Status",
@@ -266,10 +288,14 @@ const AllOrders = () => {
 
   orders &&
     orders.forEach((item) => {
+      // console.log(item.cart[0].images[0].url)
+      console.log()
       row.push({
         id: item._id,
+       image: item.cart[0].images[0].url,
+       name: item.cart[0].name,
         itemsQty: item.cart.length,
-        total: "US$ " + item.totalPrice,
+        total: "US$" + item.totalPrice,
         status: item.status,
       });
     });
